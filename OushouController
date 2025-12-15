@@ -1,0 +1,33 @@
+using UnityEngine;
+
+public class OushouController : MonoBehaviour
+{
+    bool wolk_now = true;
+    void Start()
+    {
+        
+    }
+
+    void Update()
+    {
+        if(wolk_now == true)
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Translate(-0.01f,0,0);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Translate(0.01f,0,0);
+            }
+            // if (Input.GetKey(KeyCode.W))
+            // {
+                
+            // }
+            // if (Input.GetKey(KeyCode.S))
+            // {
+                
+            // }
+        }
+    }
+}
