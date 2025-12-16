@@ -2,32 +2,74 @@ using UnityEngine;
 
 public class OushouController : MonoBehaviour
 {
+    public GameObject KomaLine;
+    private Rigidbody2D rb;
+
+    
     bool wolk_now = true;
+    float x,y,z;
+
+
     void Start()
     {
-        
+        rb = this.GetComponent<Rigidbody2D>();
+        //rd.gravityScale = 1f;
     }
 
     void Update()
     {
-        if(wolk_now == true)
-        {
+        Vector3 myPosition = transform.position;
+        x = transform.position.x;
+        y = transform.position.y;
+        z = transform.position.z;
+            if (Input.GetKey(KeyCode.Q))
+            {
+                
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                
+            }
+            if (Input.GetKey(KeyCode.E))
+            {
+                
+            }
             if (Input.GetKey(KeyCode.A))
             {
-                transform.Translate(-0.01f,0,0);
+                
             }
             if (Input.GetKey(KeyCode.D))
             {
-                transform.Translate(0.01f,0,0);
+                
             }
-            // if (Input.GetKey(KeyCode.W))
-            // {
+            if (Input.GetKey(KeyCode.Z))
+            {
                 
-            // }
-            // if (Input.GetKey(KeyCode.S))
-            // {
+            }
+            if (Input.GetKey(KeyCode.X))
+            {
                 
-            // }
-        }
+            }
+            if (Input.GetKey(KeyCode.C))
+            {
+                
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                //rd.gravityScale = 0f;
+                rb.bodyType = RigidbodyType2D.Kinematic;
+                rb.velocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                // rb.AddForse(0,0,0);
+                Debug.Log("Space");
+                GameObject komaline = Instantiate(KomaLine);
+                komaline.transform.position = new Vector3(x,y,z);
+            }
+        
+    }
+
+    public void KeyManager()
+    {
+        
     }
 }
