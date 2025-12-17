@@ -3,25 +3,38 @@ using UnityEngine;
 public class OushouController : MonoBehaviour
 {
     public GameObject KomaLine;
-    private Rigidbody2D rb;
-
+    public GameObject UpYajirushi;
+    public GameObject RightUpYajirushi;
+    public GameObject LeftUpYajirushi;
+    public GameObject DownYajirushi;
+    public GameObject RightDownYajirushi;
+    public GameObject LeftDownYajirushi;
+    public GameObject RightYajirushi;
+    public GameObject LeftYajirushi;
     
-    bool wolk_now = true;
+    private Rigidbody2D rb;
+    private GameObject currentKomaLine;
+    private GameObject currentUpYajirushi;
+    private GameObject currentRightUpYajirushi;
+    private GameObject currentLeftUpYajirushi;
+    private GameObject currentDownYajirushi;
+    private GameObject currentRightDownYajirushi;
+    private GameObject currentLeftDownYajirushi;
+    private GameObject currentRightYajirushi;
+    private GameObject currentLeftYajirushi;
+    
+    bool wolkFlag = true;
     float x,y,z;
 
 
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-        //rd.gravityScale = 1f;
     }
 
     void Update()
     {
-        Vector3 myPosition = transform.position;
-        x = transform.position.x;
-        y = transform.position.y;
-        z = transform.position.z;
+        
             if (Input.GetKey(KeyCode.Q))
             {
                 
@@ -56,20 +69,113 @@ public class OushouController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                //rd.gravityScale = 0f;
-                rb.bodyType = RigidbodyType2D.Kinematic;
-                rb.velocity = Vector2.zero;
-                rb.angularVelocity = 0f;
-                // rb.AddForse(0,0,0);
-                Debug.Log("Space");
-                GameObject komaline = Instantiate(KomaLine);
-                komaline.transform.position = new Vector3(x,y,z);
+                this.KeyManager();
             }
         
     }
 
     public void KeyManager()
     {
-        
+        //フラグの反転
+        wolkFlag = !wolkFlag;
+        //座標の確認
+        Vector3 myPosition = transform.position;
+        x = transform.position.x;
+        y = transform.position.y;
+        z = transform.position.z;
+        Debug.Log("Space");
+        if(wolkFlag == false)
+        {
+            //動きを止める
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            //特殊パネルの出現
+            currentKomaLine = Instantiate(KomaLine);
+            currentKomaLine.transform.position = new Vector3(x,y,z);
+            //矢印の出現
+            currentUpYajirushi = Instantiate(UpYajirushi);
+            currentUpYajirushi.transform.position = new Vector3(x,y+1f,z);
+
+            currentRightUpYajirushi = Instantiate(RightUpYajirushi);
+            currentRightUpYajirushi.transform.position = new Vector3(x+0.9f,y+0.9f,z);
+
+            currentLeftUpYajirushi = Instantiate(LeftUpYajirushi);
+            currentLeftUpYajirushi.transform.position = new Vector3(x-0.9f,y+0.9f,z);
+
+            currentDownYajirushi = Instantiate(DownYajirushi);
+            currentDownYajirushi.transform.position = new Vector3(x,y-1f,z);
+
+            currentRightDownYajirushi = Instantiate(RightDownYajirushi);
+            currentRightDownYajirushi.transform.position = new Vector3(x+0.9f,y-0.9f,z);
+
+            currentLeftDownYajirushi = Instantiate(LeftDownYajirushi);
+            currentLeftDownYajirushi.transform.position = new Vector3(x-0.9f,y-0.9f,z);
+
+            currentRightYajirushi = Instantiate(RightYajirushi);
+            currentRightYajirushi.transform.position = new Vector3(x+1f,y,z);
+
+            currentLeftYajirushi = Instantiate(LeftYajirushi);
+            currentLeftYajirushi.transform.position = new Vector3(x-1f,y,z);
+        }
+        else if(wolkFlag == true)
+        {
+            //動きの再開
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            //ここにKomaLineを削除する処理を挿入
+            if (currentKomaLine != null)
+            {
+                Destroy(currentKomaLine);
+                currentKomaLine = null; // 削除後、参照をクリアしておく
+            }
+
+            if(currentUpYajirushi != null)
+            {
+                Destroy(currentUpYajirushi);
+                currentUpYajirushi = null;
+            }
+
+            if(currentRightUpYajirushi != null)
+            {
+                Destroy(currentRightUpYajirushi);
+                currentRightUpYajirushi = null;
+            }
+
+            if(currentLeftUpYajirushi != null)
+            {
+                Destroy(currentLeftUpYajirushi);
+                currentLeftUpYajirushi = null;
+            }
+
+            if(currentDownYajirushi != null)
+            {
+                Destroy(currentDownYajirushi);
+                currentDownYajirushi = null;
+            }
+
+            if(currentRightDownYajirushi != null)
+            {
+                Destroy(currentRightDownYajirushi);
+                currentRightDownYajirushi = null;
+            }
+
+            if(currentLeftDownYajirushi != null)
+            {
+                Destroy(currentLeftDownYajirushi);
+                currentLeftDownYajirushi = null;
+            }
+
+            if(currentRightYajirushi != null)
+            {
+                Destroy(currentRightYajirushi);
+                currentRightYajirushi = null;
+            }
+
+            if(currentLeftYajirushi != null)
+            {
+                Destroy(currentLeftYajirushi);
+                currentLeftYajirushi = null;
+            }
+        }
     }
 }
