@@ -25,6 +25,7 @@ public class OushouController : MonoBehaviour
     
     bool wolkFlag = true;
     float x,y,z;
+    float mA = 1.0f; //as MoveAmount
 
 
     void Start()
@@ -41,7 +42,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(-1f, 1f, 0);
+                    transform.Translate(-1*mA, mA, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.W))
@@ -50,7 +51,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(0, 1f, 0);
+                    transform.Translate(0, mA, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.E))
@@ -59,7 +60,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(1f, 1f, 0);
+                    transform.Translate(mA, mA, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.A))
@@ -68,7 +69,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(-1f, 0, 0);
+                    transform.Translate(-1*mA, 0, 0);
                 }
             }
             if (Input.GetKey(KeyCode.A))
@@ -84,7 +85,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(1f, 0, 0);
+                    transform.Translate(mA, 0, 0);
                 }
             }
             if (Input.GetKey(KeyCode.D))
@@ -100,7 +101,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(-1f, -1f, 0);
+                    transform.Translate(-1*mA, -1*mA, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.X))
@@ -109,7 +110,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(0, -1f, 0);
+                    transform.Translate(0, -1*mA, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.C))
@@ -118,7 +119,7 @@ public class OushouController : MonoBehaviour
                 {
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
-                    transform.Translate(1f, -1f, 0);
+                    transform.Translate(mA, -1*mA, 0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Space))
