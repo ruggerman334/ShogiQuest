@@ -71,6 +71,13 @@ public class OushouController : MonoBehaviour
                     transform.Translate(-1f, 0, 0);
                 }
             }
+            if (Input.GetKey(KeyCode.A))
+            {
+                if(wolkFlag == true)
+                {
+                    transform.Translate(-0.01f,0,0);
+                }
+            }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 if(wolkFlag == false)
@@ -78,6 +85,13 @@ public class OushouController : MonoBehaviour
                     wolkFlag = !wolkFlag;
                     this.ClosePanel();
                     transform.Translate(1f, 0, 0);
+                }
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                if(wolkFlag == true)
+                {
+                    transform.Translate(0.01f,0,0);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Z))
