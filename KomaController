@@ -1,0 +1,332 @@
+using UnityEngine;
+using System.Threading.Tasks;
+
+public class KomaController : MonoBehaviour
+{
+    public GameObject KomaLine;
+    public GameObject UpYajirushi;
+    public GameObject RightUpYajirushi;
+    public GameObject LeftUpYajirushi;
+    public GameObject DownYajirushi;
+    public GameObject RightDownYajirushi;
+    public GameObject LeftDownYajirushi;
+    public GameObject RightYajirushi;
+    public GameObject LeftYajirushi;
+    public GameObject kemuri1;
+    public GameObject kemuri2;
+    public GameObject kemuri3;
+    public GameObject kemuri4;
+    public GameObject kemuri5;
+    public GameObject kemuri6;
+    
+    private Rigidbody2D rb;
+    private GameObject currentKomaLine;
+    private GameObject currentUpYajirushi;
+    private GameObject currentRightUpYajirushi;
+    private GameObject currentLeftUpYajirushi;
+    private GameObject currentDownYajirushi;
+    private GameObject currentRightDownYajirushi;
+    private GameObject currentLeftDownYajirushi;
+    private GameObject currentRightYajirushi;
+    private GameObject currentLeftYajirushi;
+    private GameObject currentkemuri1;
+    private GameObject currentkemuri2;
+    private GameObject currentkemuri3;
+    private GameObject currentkemuri4;
+    private GameObject currentkemuri5;
+    private GameObject currentkemuri6;
+
+    
+    bool wolkFlag = true;
+    float x,y,z;
+    float mA = 1.0f; //as MoveAmount
+    public Sprite[] changeSprites;
+    int idx = 0;
+    SpriteRenderer spriteRenderer;
+
+
+    void Start()
+    {
+        Application.targetFrameRate = 60;
+        rb = this.GetComponent<Rigidbody2D>();
+        this.spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    async Task Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            await ChangeAnimation("Hu");
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(-1*mA, mA, 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(0, mA, 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(mA, mA, 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(-1*mA, 0, 0);
+            }
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            if(wolkFlag == true)
+            {
+                transform.Translate(-0.01f,0,0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(mA, 0, 0);
+            }
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            if(wolkFlag == true)
+            {
+                transform.Translate(0.01f,0,0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(-1*mA, -1*mA, 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(0, -1*mA, 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if(wolkFlag == false)
+            {
+                wolkFlag = !wolkFlag;
+                this.ClosePanel();
+                transform.Translate(mA, -1*mA, 0);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            this.KeyManager();
+        }
+    }
+
+    public void KeyManager()
+    {
+        //フラグの反転
+        wolkFlag = !wolkFlag;
+        //座標の確認
+        Vector3 myPosition = transform.position;
+        x = transform.position.x;
+        y = transform.position.y;
+        z = transform.position.z;
+        Debug.Log("KeyManager");
+        if(wolkFlag == false)
+        {
+            this.OpenPanel();
+        }
+        else if(wolkFlag == true)
+        {
+            this.ClosePanel();
+        }
+    }
+    public void OpenPanel()
+    {
+        //動きを止める
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        //特殊パネルの出現
+        currentKomaLine = Instantiate(KomaLine);
+        currentKomaLine.transform.position = new Vector3(x,y,z);
+        //矢印の出現
+        currentUpYajirushi = Instantiate(UpYajirushi);
+        currentUpYajirushi.transform.position = new Vector3(x,y+1f,z);
+
+        currentRightUpYajirushi = Instantiate(RightUpYajirushi);
+        currentRightUpYajirushi.transform.position = new Vector3(x+0.9f,y+0.9f,z);
+
+        currentLeftUpYajirushi = Instantiate(LeftUpYajirushi);
+        currentLeftUpYajirushi.transform.position = new Vector3(x-0.9f,y+0.9f,z);
+
+        currentDownYajirushi = Instantiate(DownYajirushi);
+        currentDownYajirushi.transform.position = new Vector3(x,y-1f,z);
+
+        currentRightDownYajirushi = Instantiate(RightDownYajirushi);
+        currentRightDownYajirushi.transform.position = new Vector3(x+0.9f,y-0.9f,z);
+
+        currentLeftDownYajirushi = Instantiate(LeftDownYajirushi);
+        currentLeftDownYajirushi.transform.position = new Vector3(x-0.9f,y-0.9f,z);
+
+        currentRightYajirushi = Instantiate(RightYajirushi);
+        currentRightYajirushi.transform.position = new Vector3(x+1f,y,z);
+
+        currentLeftYajirushi = Instantiate(LeftYajirushi);
+        currentLeftYajirushi.transform.position = new Vector3(x-1f,y,z);
+    }
+
+    public void ClosePanel()
+    {
+        //動きの再開
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        //ここにKomaLineを削除する処理を挿入
+        if (currentKomaLine != null)
+        {
+            Destroy(currentKomaLine);
+            currentKomaLine = null; // 削除後、参照をクリアしておく
+        }
+
+        if(currentUpYajirushi != null)
+        {
+            Destroy(currentUpYajirushi);
+            currentUpYajirushi = null;
+        }
+
+        if(currentRightUpYajirushi != null)
+        {
+            Destroy(currentRightUpYajirushi);
+            currentRightUpYajirushi = null;
+        }
+
+        if(currentLeftUpYajirushi != null)
+        {
+            Destroy(currentLeftUpYajirushi);
+            currentLeftUpYajirushi = null;
+        }
+
+        if(currentDownYajirushi != null)
+        {
+            Destroy(currentDownYajirushi);
+            currentDownYajirushi = null;
+        }
+
+        if(currentRightDownYajirushi != null)
+        {
+            Destroy(currentRightDownYajirushi);
+            currentRightDownYajirushi = null;
+        }
+
+        if(currentLeftDownYajirushi != null)
+        {
+            Destroy(currentLeftDownYajirushi);
+            currentLeftDownYajirushi = null;
+        }
+
+        if(currentRightYajirushi != null)
+        {
+            Destroy(currentRightYajirushi);
+            currentRightYajirushi = null;
+        }
+
+        if(currentLeftYajirushi != null)
+        {
+            Destroy(currentLeftYajirushi);
+            currentLeftYajirushi = null;
+        }
+    }
+
+    public async Task ChangeAnimation(string komamei)
+    {
+        
+        Vector3 myPosition = transform.position;
+        x = transform.position.x;
+        y = transform.position.y;
+        z = transform.position.z;
+        currentkemuri1 = Instantiate(kemuri1);
+        currentkemuri1.transform.position = new Vector3(x,y,z);
+        await Task.Delay(100);
+        Destroy(currentkemuri1);
+        currentkemuri1 = null;
+        currentkemuri2 = Instantiate(kemuri2);
+        currentkemuri2.transform.position = new Vector3(x,y,z);
+        await Task.Delay(100);
+        Destroy(currentkemuri2);
+        currentkemuri2 = null;
+        currentkemuri3 = Instantiate(kemuri3);
+        currentkemuri3.transform.position = new Vector3(x,y,z);
+        await Task.Delay(100);
+        Destroy(currentkemuri3);
+        currentkemuri3 = null;
+        currentkemuri4 = Instantiate(kemuri4);
+        currentkemuri4.transform.position = new Vector3(x,y,z);
+        switch (komamei)
+        {
+            case "Oushou":
+                this.spriteRenderer.sprite = this.changeSprites[0];
+                break;
+            case "Kakugyou":
+                this.spriteRenderer.sprite = this.changeSprites[1];
+                break;
+            case "Hisha":
+                this.spriteRenderer.sprite = this.changeSprites[2];
+                break;
+            case "Hu":
+                this.spriteRenderer.sprite = this.changeSprites[3];
+                break;
+            case "kinshou":
+                this.spriteRenderer.sprite = this.changeSprites[4];
+                break;
+            case "Ginshou":
+                this.spriteRenderer.sprite = this.changeSprites[5];
+                break;
+            case "Keima":
+                this.spriteRenderer.sprite = this.changeSprites[6];
+                break;
+            case "Kyousha":
+                this.spriteRenderer.sprite = this.changeSprites[7];
+                break;
+            default:
+                Debug.Log("Sprite ERRER");
+                break;
+        }
+        await Task.Delay(100);
+        Destroy(currentkemuri4);
+        currentkemuri4 = null;
+        currentkemuri5 = Instantiate(kemuri5);
+        currentkemuri5.transform.position = new Vector3(x,y,z);
+        await Task.Delay(100);
+        Destroy(currentkemuri5);
+        currentkemuri5 = null;
+        currentkemuri6 = Instantiate(kemuri6);
+        currentkemuri6.transform.position = new Vector3(x,y,z);
+        await Task.Delay(100);
+        Destroy(currentkemuri6);
+        currentkemuri6 = null;
+    }
+}
