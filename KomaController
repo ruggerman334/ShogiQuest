@@ -38,16 +38,18 @@ public class KomaController : MonoBehaviour
 
     
     bool wolkFlag = true;
+    bool upFlag,downFlag,rightFlag,leftFlag,rightupFlag,rightdownFlag,leftupFlag,leftdownFlag;
     float x,y,z;
     float mA = 1.0f; //as MoveAmount
     public Sprite[] changeSprites;
-    int idx = 0;
+    // int idx = 0;
     SpriteRenderer spriteRenderer;
 
 
     void Start()
     {
         Application.targetFrameRate = 60;
+        FlagOff();
         rb = this.GetComponent<Rigidbody2D>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -285,6 +287,7 @@ public class KomaController : MonoBehaviour
         currentkemuri3 = null;
         currentkemuri4 = Instantiate(kemuri4);
         currentkemuri4.transform.position = new Vector3(x,y,z);
+        //変身部分
         switch (komamei)
         {
             case "Oushou":
@@ -315,6 +318,7 @@ public class KomaController : MonoBehaviour
                 Debug.Log("Sprite ERRER");
                 break;
         }
+
         await Task.Delay(100);
         Destroy(currentkemuri4);
         currentkemuri4 = null;
@@ -328,5 +332,16 @@ public class KomaController : MonoBehaviour
         await Task.Delay(100);
         Destroy(currentkemuri6);
         currentkemuri6 = null;
+    }
+    public void FlagOff()
+    {
+        upFlag = false;
+        dwonFlag = false;
+        rightFlag = false;
+        leftFlag = false;
+        rightdownFlag = false;
+        rightupFlag = false;
+        leftupFlag = false;
+        leftdownFlag = false;
     }
 }
