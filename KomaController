@@ -39,17 +39,18 @@ public class KomaController : MonoBehaviour
     
     bool wolkFlag = true;
     bool upFlag,downFlag,rightFlag,leftFlag,rightupFlag,rightdownFlag,leftupFlag,leftdownFlag;
+    public int oushouCount = 0,kakugyouCount = 0,hishaCount = 0,huhyouCount = 0,kinshouCount = 0,ginshouCount = 0,keimaCount = 0,kyoushaCount = 0;
     float x,y,z;
     float mA = 1.0f; //as MoveAmount
+    float wolkSpeed = 0.01f;
     public Sprite[] changeSprites;
-    // int idx = 0;
     SpriteRenderer spriteRenderer;
 
 
     void Start()
     {
-        Application.targetFrameRate = 60;
-        FlagOff();
+        Application.targetFrameRate = 240;
+        FlagOff();//フラグの初期化
         rb = this.GetComponent<Rigidbody2D>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -62,7 +63,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(-1*mA, mA, 0);
             }
         }
@@ -71,7 +72,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(0, mA, 0);
             }
         }
@@ -80,7 +81,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(mA, mA, 0);
             }
         }
@@ -89,7 +90,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(-1*mA, 0, 0);
             }
         }
@@ -97,7 +98,7 @@ public class KomaController : MonoBehaviour
         {
             if(wolkFlag == true)
             {
-                transform.Translate(-0.01f,0,0);
+                transform.Translate(-1*wolkSpeed,0,0);
             }
         }
         if (Input.GetKeyDown(KeyCode.D))
@@ -105,7 +106,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(mA, 0, 0);
             }
         }
@@ -113,7 +114,7 @@ public class KomaController : MonoBehaviour
         {
             if(wolkFlag == true)
             {
-                transform.Translate(0.01f,0,0);
+                transform.Translate(wolkSpeed,0,0);
             }
         }
         if (Input.GetKeyDown(KeyCode.Z))
@@ -121,7 +122,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(-1*mA, -1*mA, 0);
             }
         }
@@ -130,7 +131,7 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(0, -1*mA, 0);
             }
         }
@@ -139,14 +140,29 @@ public class KomaController : MonoBehaviour
             if(wolkFlag == false)
             {
                 wolkFlag = !wolkFlag;
-                this.ClosePanel();
+                this.CloseMovePanel();
                 transform.Translate(mA, -1*mA, 0);
             }
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            ChangeAnimation("Oushou");
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             this.KeyManager();
         }
+    }
+    public void StopMove()
+    {
+        rb.bodyType = RigidbodyType2D.Kinematic;//動きの固定
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+    }
+
+    public void StartMove()
+    {
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     public void KeyManager()
@@ -161,19 +177,17 @@ public class KomaController : MonoBehaviour
         Debug.Log("KeyManager");
         if(wolkFlag == false)
         {
-            this.OpenPanel();
+            this.OpenMovePanel();
         }
         else if(wolkFlag == true)
         {
-            this.ClosePanel();
+            this.CloseMovePanel();
         }
     }
-    public void OpenPanel()
+    public void OpenMovePanel()
     {
         //動きを止める
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.linearVelocity = Vector2.zero;
-        rb.angularVelocity = 0f;
+        StopMove();
         //特殊パネルの出現
         currentKomaLine = Instantiate(KomaLine);
         currentKomaLine.transform.position = new Vector3(x,y,z);
@@ -203,10 +217,10 @@ public class KomaController : MonoBehaviour
         currentLeftYajirushi.transform.position = new Vector3(x-1f,y,z);
     }
 
-    public void ClosePanel()
+    public void CloseMovePanel()
     {
         //動きの再開
-        rb.bodyType = RigidbodyType2D.Dynamic;
+        StartMove();
         //ここにKomaLineを削除する処理を挿入
         if (currentKomaLine != null)
         {
@@ -302,7 +316,7 @@ public class KomaController : MonoBehaviour
             case "Hu":
                 this.spriteRenderer.sprite = this.changeSprites[3];
                 break;
-            case "kinshou":
+            case "Kinshou":
                 this.spriteRenderer.sprite = this.changeSprites[4];
                 break;
             case "Ginshou":
@@ -336,7 +350,7 @@ public class KomaController : MonoBehaviour
     public void FlagOff()
     {
         upFlag = false;
-        dwonFlag = false;
+        downFlag = false;
         rightFlag = false;
         leftFlag = false;
         rightdownFlag = false;
