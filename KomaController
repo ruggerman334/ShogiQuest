@@ -90,8 +90,8 @@ public class KomaController : MonoBehaviour
         FlagOff();//フラグの初期化
         rb = this.GetComponent<Rigidbody2D>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
-        NumberArray = new GameObject[]{Instantiate(Number0),Instantiate(Number1),Instantiate(Number2),Instantiate(Number3)
-        ,Instantiate(Number4),Instantiate(Number5),Instantiate(Number6),Instantiate(Number7),Instantiate(Number8),Instantiate(Number9)};
+        // NumberArray = new GameObject[]{Instantiate(Number0),Instantiate(Number1),Instantiate(Number2),Instantiate(Number3)
+        // ,Instantiate(Number4),Instantiate(Number5),Instantiate(Number6),Instantiate(Number7),Instantiate(Number8),Instantiate(Number9)};
     }
 
     async Task Update()
@@ -442,6 +442,8 @@ public class KomaController : MonoBehaviour
 
     public void NumberView(string komamei,float x,float y,float z)
     {
+        NumberArray = new GameObject[]{Instantiate(Number0),Instantiate(Number1),Instantiate(Number2),Instantiate(Number3)
+        ,Instantiate(Number4),Instantiate(Number5),Instantiate(Number6),Instantiate(Number7),Instantiate(Number8),Instantiate(Number9)};
         switch (komamei)
         {
             case "Oushou":
