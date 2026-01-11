@@ -90,21 +90,19 @@ public class KomaController : MonoBehaviour
         FlagOff();//フラグの初期化
         rb = this.GetComponent<Rigidbody2D>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
-        // NumberArray = new GameObject[]{Instantiate(Number0),Instantiate(Number1),Instantiate(Number2),Instantiate(Number3)
-        // ,Instantiate(Number4),Instantiate(Number5),Instantiate(Number6),Instantiate(Number7),Instantiate(Number8),Instantiate(Number9)};
     }
 
     async Task Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            // await ChangeAnimation("Huhyou");
-            if(movePanelFlag == true)
+            if(movePanelFlag == true)//ここら辺関数化したいね
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
                 transform.Translate(-1*mA, mA, 0);
             }
+            ChangeFunction("Hisha");
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -114,6 +112,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(0, mA, 0);
             }
+            ChangeFunction("Oushou");
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -123,6 +122,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(mA, mA, 0);
             }
+            ChangeFunction("Kakugyou");
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -132,6 +132,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(-1*mA, 0, 0);
             }
+            ChangeFunction("Kyousha");
         }
         if (Input.GetKey(KeyCode.A))
         {
@@ -148,6 +149,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(mA, 0, 0);
             }
+            ChangeFunction("Keima");
         }
         if (Input.GetKey(KeyCode.D))
         {
@@ -164,6 +166,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(-1*mA, -1*mA, 0);
             }
+            ChangeFunction("Ginshou");
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -173,6 +176,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(0, -1*mA, 0);
             }
+            ChangeAnimation("Huhyou");
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -182,6 +186,7 @@ public class KomaController : MonoBehaviour
                 this.CloseMovePanel();
                 transform.Translate(mA, -1*mA, 0);
             }
+            ChangeFunction("Kinshou");
         }
         if (Input.GetKeyDown(KeyCode.S))//Sキーの処理
         {
@@ -230,19 +235,19 @@ public class KomaController : MonoBehaviour
             ChangeAnimation("Oushou");
         }
     }
-    public void StopMove()
+    public void StopMove()//運動停止
     {
         rb.bodyType = RigidbodyType2D.Kinematic;//動きの固定
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
     }
 
-    public void StartMove()
+    public void StartMove()//運動再開
     {
         rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
-    public void OpenMovePanel()
+    public void OpenMovePanel()//移動パネルの展開
     {
         movePanelFlag = true;
         //動きを止める
@@ -276,68 +281,16 @@ public class KomaController : MonoBehaviour
         currentLeftYajirushi.transform.position = new Vector3(x-1f,y,z);
     }
 
-    public void CloseMovePanel()
+    public void CloseMovePanel()//移動パネルを閉じる
     {
         //動きの再開
         StartMove();
-        //ここにKomaLineを削除する処理を挿入
-        if (currentKomaLine != null)
-        {
-            Destroy(currentKomaLine);
-            currentKomaLine = null; // 削除後、参照をクリアしておく
-        }
-
-        if(currentUpYajirushi != null)
-        {
-            Destroy(currentUpYajirushi);
-            currentUpYajirushi = null;
-        }
-
-        if(currentRightUpYajirushi != null)
-        {
-            Destroy(currentRightUpYajirushi);
-            currentRightUpYajirushi = null;
-        }
-
-        if(currentLeftUpYajirushi != null)
-        {
-            Destroy(currentLeftUpYajirushi);
-            currentLeftUpYajirushi = null;
-        }
-
-        if(currentDownYajirushi != null)
-        {
-            Destroy(currentDownYajirushi);
-            currentDownYajirushi = null;
-        }
-
-        if(currentRightDownYajirushi != null)
-        {
-            Destroy(currentRightDownYajirushi);
-            currentRightDownYajirushi = null;
-        }
-
-        if(currentLeftDownYajirushi != null)
-        {
-            Destroy(currentLeftDownYajirushi);
-            currentLeftDownYajirushi = null;
-        }
-
-        if(currentRightYajirushi != null)
-        {
-            Destroy(currentRightYajirushi);
-            currentRightYajirushi = null;
-        }
-
-        if(currentLeftYajirushi != null)
-        {
-            Destroy(currentLeftYajirushi);
-            currentLeftYajirushi = null;
-        }
+        //タグ(OverLayer)の削除
+        DestroyOverLayer();
         movePanelFlag = false;
     }
 
-    public void OpenKomaPanel()
+    public void OpenKomaPanel()//駒パネルの展開
     {
         komaPanelFlag = true;
         //動きを止める
@@ -379,68 +332,16 @@ public class KomaController : MonoBehaviour
         NumberView("Kyousha",x,y,z);
     }
 
-    public void CloseKomaPanel()
+    public void CloseKomaPanel()//駒パネルを閉じる
     {
         //動きの再開
         StartMove();
-        //ここにKomaLineを削除する処理を挿入
-        if (currentKomaLine != null)
-        {
-            Destroy(currentKomaLine);
-            currentKomaLine = null; // 削除後、参照をクリアしておく
-        }
-
-        if(currentKomaOushou != null)
-        {
-            Destroy(currentKomaOushou);
-            currentKomaOushou = null;
-        }
-
-        if(currentKomaKakugyou != null)
-        {
-            Destroy(currentKomaKakugyou);
-            currentKomaKakugyou = null;
-        }
-
-        if(currentKomaHisha != null)
-        {
-            Destroy(currentKomaHisha);
-            currentKomaHisha = null;
-        }
-
-        if(currentKomaHuhyou != null)
-        {
-            Destroy(currentKomaHuhyou);
-            currentKomaHuhyou = null;
-        }
-
-        if(currentKomaKinshou != null)
-        {
-            Destroy(currentKomaKinshou);
-            currentKomaKinshou = null;
-        }
-
-        if(currentKomaGinshou != null)
-        {
-            Destroy(currentKomaGinshou);
-            currentKomaGinshou = null;
-        }
-
-        if(currentKomaKeima != null)
-        {
-            Destroy(currentKomaKeima);
-            currentKomaKeima = null;
-        }
-
-        if(currentKomaKyousha != null)
-        {
-            Destroy(currentKomaKyousha);
-            currentKomaKyousha = null;
-        }
+        //タグ(OverLayer)の削除
+        DestroyOverLayer();
         komaPanelFlag = false;
     }
 
-    public void NumberView(string komamei,float x,float y,float z)
+    public void NumberView(string komamei,float x,float y,float z)//所持駒の表示
     {
         NumberArray = new GameObject[]{Instantiate(Number0),Instantiate(Number1),Instantiate(Number2),Instantiate(Number3)
         ,Instantiate(Number4),Instantiate(Number5),Instantiate(Number6),Instantiate(Number7),Instantiate(Number8),Instantiate(Number9)};
@@ -475,6 +376,27 @@ public class KomaController : MonoBehaviour
                 break;
         }
     }
+
+    public void ChangeFunction(string komamei)//駒の見た目変更
+    {
+        if(komaPanelFlag == true)
+        {
+            //フラグの反転
+            wolkFlag = !wolkFlag;
+            CloseKomaPanel();
+            ChangeAnimation(komamei);
+        }
+    }
+
+    public void DestroyOverLayer()//タグ(OverLayer)の削除
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("OverLayer");
+        foreach(GameObject chinko in objects)
+        {
+            Destroy(chinko);
+        }
+    }
+
     public async Task ChangeAnimation(string komamei)
     {
         
@@ -482,7 +404,7 @@ public class KomaController : MonoBehaviour
         x = transform.position.x;
         y = transform.position.y;
         z = transform.position.z;
-        currentkemuri1 = Instantiate(kemuri1);
+        currentkemuri1 = Instantiate(kemuri1);///////配列化して短くできる
         currentkemuri1.transform.position = new Vector3(x,y,z);
         await Task.Delay(100);
         Destroy(currentkemuri1);
