@@ -18,6 +18,24 @@ public class KomaController : MonoBehaviour
     public GameObject kemuri4;
     public GameObject kemuri5;
     public GameObject kemuri6;
+    public GameObject KomaOushou;
+    public GameObject KomaKakugyou;
+    public GameObject KomaHisha;
+    public GameObject KomaHuhyou;
+    public GameObject KomaKinshou;
+    public GameObject KomaGinshou;
+    public GameObject KomaKeima;
+    public GameObject KomaKyousha;
+    public GameObject Number0;
+    public GameObject Number1;
+    public GameObject Number2;
+    public GameObject Number3;
+    public GameObject Number4;
+    public GameObject Number5;
+    public GameObject Number6;
+    public GameObject Number7;
+    public GameObject Number8;
+    public GameObject Number9;
     
     private Rigidbody2D rb;
     private GameObject currentKomaLine;
@@ -35,11 +53,30 @@ public class KomaController : MonoBehaviour
     private GameObject currentkemuri4;
     private GameObject currentkemuri5;
     private GameObject currentkemuri6;
+    private GameObject currentKomaOushou;
+    private GameObject currentKomaKakugyou;
+    private GameObject currentKomaHisha;
+    private GameObject currentKomaHuhyou;
+    private GameObject currentKomaKinshou;
+    private GameObject currentKomaGinshou;
+    private GameObject currentKomaKeima;
+    private GameObject currentKomaKyousha;
+    private GameObject currentNumber0;
+    private GameObject currentNumber1;
+    private GameObject currentNumber2;
+    private GameObject currentNumber3;
+    private GameObject currentNumber4;
+    private GameObject currentNumber5;
+    private GameObject currentNumber6;
+    private GameObject currentNumber7;
+    private GameObject currentNumber8;
+    private GameObject currentNumber9;
 
     
-    bool wolkFlag = true;
+    bool wolkFlag = true,movePanelFlag = false,komaPanelFlag = false;
     bool upFlag,downFlag,rightFlag,leftFlag,rightupFlag,rightdownFlag,leftupFlag,leftdownFlag;
     public int oushouCount = 0,kakugyouCount = 0,hishaCount = 0,huhyouCount = 0,kinshouCount = 0,ginshouCount = 0,keimaCount = 0,kyoushaCount = 0;
+    private GameObject[] NumberArray;
     float x,y,z;
     float mA = 1.0f; //as MoveAmount
     float wolkSpeed = 0.01f;
@@ -53,14 +90,16 @@ public class KomaController : MonoBehaviour
         FlagOff();//フラグの初期化
         rb = this.GetComponent<Rigidbody2D>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
+        NumberArray = new GameObject[]{Instantiate(Number0),Instantiate(Number1),Instantiate(Number2),Instantiate(Number3)
+        ,Instantiate(Number4),Instantiate(Number5),Instantiate(Number6),Instantiate(Number7),Instantiate(Number8),Instantiate(Number9)};
     }
 
     async Task Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            await ChangeAnimation("Hu");
-            if(wolkFlag == false)
+            // await ChangeAnimation("Huhyou");
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -69,7 +108,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -78,7 +117,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -87,7 +126,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -103,7 +142,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -119,7 +158,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -128,7 +167,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
@@ -137,20 +176,58 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if(wolkFlag == false)
+            if(movePanelFlag == true)
             {
                 wolkFlag = !wolkFlag;
                 this.CloseMovePanel();
                 transform.Translate(mA, -1*mA, 0);
             }
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))//Sキーの処理
+        {
+            if(movePanelFlag == false)
+            {
+                //フラグの反転
+                wolkFlag = !wolkFlag;
+                //座標の確認
+                Vector3 myPosition = transform.position;
+                x = transform.position.x;
+                y = transform.position.y;
+                z = transform.position.z;
+                if(wolkFlag == false)
+                {
+                    this.OpenKomaPanel();
+                }
+                else if(wolkFlag == true)
+                {
+                    this.CloseKomaPanel();
+                }
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))//スペースキーの処理
+        {
+            if(komaPanelFlag == false)
+            {
+                //フラグの反転
+                wolkFlag = !wolkFlag;
+                //座標の確認
+                Vector3 myPosition = transform.position;
+                x = transform.position.x;
+                y = transform.position.y;
+                z = transform.position.z;
+                if(wolkFlag == false)
+                {
+                    this.OpenMovePanel();
+                }
+                else if(wolkFlag == true)
+                {
+                    this.CloseMovePanel();
+                }
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.P))
         {
             ChangeAnimation("Oushou");
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            this.KeyManager();
         }
     }
     public void StopMove()
@@ -165,27 +242,9 @@ public class KomaController : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
-    public void KeyManager()
-    {
-        //フラグの反転
-        wolkFlag = !wolkFlag;
-        //座標の確認
-        Vector3 myPosition = transform.position;
-        x = transform.position.x;
-        y = transform.position.y;
-        z = transform.position.z;
-        Debug.Log("KeyManager");
-        if(wolkFlag == false)
-        {
-            this.OpenMovePanel();
-        }
-        else if(wolkFlag == true)
-        {
-            this.CloseMovePanel();
-        }
-    }
     public void OpenMovePanel()
     {
+        movePanelFlag = true;
         //動きを止める
         StopMove();
         //特殊パネルの出現
@@ -275,8 +334,145 @@ public class KomaController : MonoBehaviour
             Destroy(currentLeftYajirushi);
             currentLeftYajirushi = null;
         }
+        movePanelFlag = false;
     }
 
+    public void OpenKomaPanel()
+    {
+        komaPanelFlag = true;
+        //動きを止める
+        StopMove();
+        //特殊パネルの出現
+        currentKomaLine = Instantiate(KomaLine);
+        currentKomaLine.transform.position = new Vector3(x,y,z);
+        //駒選択肢の出現
+        currentKomaOushou = Instantiate(KomaOushou);
+        currentKomaOushou.transform.position = new Vector3(x,y+1.1f,z);
+        NumberView("Oushou",x,y,z);
+
+        currentKomaKakugyou = Instantiate(KomaKakugyou);
+        currentKomaKakugyou.transform.position = new Vector3(x+1.1f,y+1.1f,z);
+        NumberView("Kakugyou",x,y,z);
+
+        currentKomaHisha = Instantiate(KomaHisha);
+        currentKomaHisha.transform.position = new Vector3(x-1.1f,y+1.1f,z);
+        NumberView("Hisha",x,y,z);
+
+        currentKomaHuhyou = Instantiate(KomaHuhyou);
+        currentKomaHuhyou.transform.position = new Vector3(x,y-1.1f,z);
+        NumberView("Huhyou",x,y,z);
+
+        currentKomaKinshou = Instantiate(KomaKinshou);
+        currentKomaKinshou.transform.position = new Vector3(x+1.1f,y-1.1f,z);
+        NumberView("Kinshou",x,y,z);
+
+        currentKomaGinshou = Instantiate(KomaGinshou);
+        currentKomaGinshou.transform.position = new Vector3(x-1.1f,y-1.1f,z);
+        NumberView("Ginshou",x,y,z);
+
+        currentKomaKeima = Instantiate(KomaKeima);
+        currentKomaKeima.transform.position = new Vector3(x+1.1f,y,z);
+        NumberView("Keima",x,y,z);
+
+        currentKomaKyousha = Instantiate(KomaKyousha);
+        currentKomaKyousha.transform.position = new Vector3(x-1.1f,y,z);
+        NumberView("Kyousha",x,y,z);
+    }
+
+    public void CloseKomaPanel()
+    {
+        //動きの再開
+        StartMove();
+        //ここにKomaLineを削除する処理を挿入
+        if (currentKomaLine != null)
+        {
+            Destroy(currentKomaLine);
+            currentKomaLine = null; // 削除後、参照をクリアしておく
+        }
+
+        if(currentKomaOushou != null)
+        {
+            Destroy(currentKomaOushou);
+            currentKomaOushou = null;
+        }
+
+        if(currentKomaKakugyou != null)
+        {
+            Destroy(currentKomaKakugyou);
+            currentKomaKakugyou = null;
+        }
+
+        if(currentKomaHisha != null)
+        {
+            Destroy(currentKomaHisha);
+            currentKomaHisha = null;
+        }
+
+        if(currentKomaHuhyou != null)
+        {
+            Destroy(currentKomaHuhyou);
+            currentKomaHuhyou = null;
+        }
+
+        if(currentKomaKinshou != null)
+        {
+            Destroy(currentKomaKinshou);
+            currentKomaKinshou = null;
+        }
+
+        if(currentKomaGinshou != null)
+        {
+            Destroy(currentKomaGinshou);
+            currentKomaGinshou = null;
+        }
+
+        if(currentKomaKeima != null)
+        {
+            Destroy(currentKomaKeima);
+            currentKomaKeima = null;
+        }
+
+        if(currentKomaKyousha != null)
+        {
+            Destroy(currentKomaKyousha);
+            currentKomaKyousha = null;
+        }
+        komaPanelFlag = false;
+    }
+
+    public void NumberView(string komamei,float x,float y,float z)
+    {
+        switch (komamei)
+        {
+            case "Oushou":
+                NumberArray[oushouCount].transform.position = new Vector3(x,y+1.1f,z);
+                break;
+            case "Kakugyou":
+                NumberArray[kakugyouCount].transform.position = new Vector3(x+1.1f,y+1.1f,z);
+                break;
+            case "Hisha":
+                NumberArray[hishaCount].transform.position = new Vector3(x-1.1f,y+1.1f,z);
+                break;
+            case "Huhyou":
+                NumberArray[huhyouCount].transform.position = new Vector3(x,y-1.1f,z);
+                break;
+            case "Kinshou":
+                NumberArray[kinshouCount].transform.position = new Vector3(x+1.1f,y-1.1f,z);
+                break;
+            case "Ginshou":
+                NumberArray[ginshouCount].transform.position = new Vector3(x-1.1f,y-1.1f,z);
+                break;
+            case "Keima":
+                NumberArray[keimaCount].transform.position = new Vector3(x+1.1f,y,z);
+                break;
+            case "Kyousha":
+                NumberArray[kyoushaCount].transform.position = new Vector3(x-1.1f,y,z);
+                break;
+            default:
+                Debug.Log("Number ERRER : " + komamei + " 残駒数カウント");
+                break;
+        }
+    }
     public async Task ChangeAnimation(string komamei)
     {
         
@@ -313,7 +509,7 @@ public class KomaController : MonoBehaviour
             case "Hisha":
                 this.spriteRenderer.sprite = this.changeSprites[2];
                 break;
-            case "Hu":
+            case "Huhyou":
                 this.spriteRenderer.sprite = this.changeSprites[3];
                 break;
             case "Kinshou":
