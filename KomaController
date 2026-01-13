@@ -96,42 +96,22 @@ public class KomaController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if(movePanelFlag == true)//ここら辺関数化したいね
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(-1*mA, mA, 0);
-            }
+            MoveFunction(-1*mA, mA, 0);
             ChangeFunction("Hisha");
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(0, mA, 0);
-            }
+            MoveFunction(0, mA, 0);
             ChangeFunction("Oushou");
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(mA, mA, 0);
-            }
+            MoveFunction(mA, mA, 0);
             ChangeFunction("Kakugyou");
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(-1*mA, 0, 0);
-            }
+            MoveFunction(-1*mA, 0, 0);
             ChangeFunction("Kyousha");
         }
         if (Input.GetKey(KeyCode.A))
@@ -143,12 +123,7 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(mA, 0, 0);
-            }
+            MoveFunction(mA, 0, 0);
             ChangeFunction("Keima");
         }
         if (Input.GetKey(KeyCode.D))
@@ -160,32 +135,17 @@ public class KomaController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(-1*mA, -1*mA, 0);
-            }
+            MoveFunction(-1*mA, -1*mA, 0);
             ChangeFunction("Ginshou");
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(0, -1*mA, 0);
-            }
-            ChangeAnimation("Huhyou");
+            MoveFunction(0, -1*mA, 0);
+            ChangeFunction("Huhyou");
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if(movePanelFlag == true)
-            {
-                wolkFlag = !wolkFlag;
-                this.CloseMovePanel();
-                transform.Translate(mA, -1*mA, 0);
-            }
+            MoveFunction(mA, -1*mA, 0);
             ChangeFunction("Kinshou");
         }
         if (Input.GetKeyDown(KeyCode.S))//Sキーの処理
@@ -206,6 +166,8 @@ public class KomaController : MonoBehaviour
                 else if(wolkFlag == true)
                 {
                     this.CloseKomaPanel();
+                    //動きの再開
+                    StartMove();
                 }
             }
         }
@@ -334,8 +296,6 @@ public class KomaController : MonoBehaviour
 
     public void CloseKomaPanel()//駒パネルを閉じる
     {
-        //動きの再開
-        StartMove();
         //タグ(OverLayer)の削除
         DestroyOverLayer();
         komaPanelFlag = false;
@@ -377,6 +337,16 @@ public class KomaController : MonoBehaviour
         }
     }
 
+    public void MoveFunction(float x,float y,float z)
+    {
+        if(movePanelFlag == true)//ここら辺関数化したいね
+        {
+            wolkFlag = !wolkFlag;
+            this.CloseMovePanel();
+            transform.Translate(x, y, z);
+        }
+    }
+
     public void ChangeFunction(string komamei)//駒の見た目変更
     {
         if(komaPanelFlag == true)
@@ -399,7 +369,7 @@ public class KomaController : MonoBehaviour
 
     public async Task ChangeAnimation(string komamei)
     {
-        
+        wolkFlag = false;
         Vector3 myPosition = transform.position;
         x = transform.position.x;
         y = transform.position.y;
@@ -466,6 +436,9 @@ public class KomaController : MonoBehaviour
         await Task.Delay(100);
         Destroy(currentkemuri6);
         currentkemuri6 = null;
+        //動きの再開
+        StartMove();
+        wolkFlag = true;
     }
     public void FlagOff()
     {
