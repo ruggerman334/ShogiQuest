@@ -1,6 +1,8 @@
 using UnityEngine;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+
 
 public class KomaController : MonoBehaviour
 {
@@ -76,14 +78,17 @@ public class KomaController : MonoBehaviour
     
     bool wolkFlag = true,movePanelFlag = false,komaPanelFlag = false;
     bool upFlag,downFlag,rightFlag,leftFlag,rightupFlag,rightdownFlag,leftupFlag,leftdownFlag;
+    bool collisionFlag = false;
+    string nowKomamei;
     public Dictionary<string, int> Count = new Dictionary<string, int>
     {
         {"Oushou",0},{"Kakugyou",0},{"Hisha",0},{"Huhyou",0},{"Kinshou",0},{"Ginshou",0},{"Keima",0},{"Kyousha",0}
     };
     private GameObject[] NumberArray;
     float x,y,z;
-    float mA = 1.0f; //as MoveAmount
+    float mA = 2.0f; //as MoveAmount
     float wolkSpeed = 0.01f;
+    int playCredit = 0;
     public Sprite[] changeSprites;
     SpriteRenderer spriteRenderer;
 
@@ -92,6 +97,8 @@ public class KomaController : MonoBehaviour
     {
         Application.targetFrameRate = 240;
         FlagOff();//フラグの初期化
+        upFlag = true;
+        nowKomamei = "Huhyou";
         rb = this.GetComponent<Rigidbody2D>();
         this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -196,6 +203,14 @@ public class KomaController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void straightMove(float x,float y,float z)//直線的な動き(ぶつかるまで)
+    {
+        do {
+            transform.Translate(x, y, z);
+            Debug.Log("Move Now");
+        }while(collisionFlag == false);
     }
     public void StopMove()//運動停止
     {
@@ -328,11 +343,25 @@ public class KomaController : MonoBehaviour
 
     public void MoveFunction(bool flag, float x,float y,float z)
     {
-        if(movePanelFlag == true && flag == true)//ここら辺関数化したいね
+        if(movePanelFlag == true && flag == true && playCredit >= 1)//ここら辺関数化したいね
         {
             wolkFlag = !wolkFlag;
             this.CloseMovePanel();
-            transform.Translate(x, y, z);
+            if(nowKomamei == "Kakugyou" || nowKomamei == "Hisha" || nowKomamei == "Kyousha")
+            {
+                straightMove(x,y,z);
+            }
+            else if (nowKomamei == "Keima")//bug arukamo
+            {
+                transform.Translate(x-mA,y,z);
+                Thread.Sleep(500);
+                transform.Translate(x,y,z);
+            }
+            else
+            {
+                transform.Translate(x, y, z);
+            }
+            playCredit--;
         }
     }
 
@@ -343,6 +372,7 @@ public class KomaController : MonoBehaviour
             //フラグの反転
             wolkFlag = !wolkFlag;
             CloseKomaPanel();
+            FlagOff();
             ChangeAnimation(komamei);
             Count[komamei]--;
         }
@@ -381,6 +411,8 @@ public class KomaController : MonoBehaviour
         currentkemuri3 = null;
         currentkemuri4 = Instantiate(kemuri4);
         currentkemuri4.transform.position = new Vector3(x,y,z);
+
+        nowKomamei = komamei;//自認の更新
         //変身部分
         switch (komamei)
         {
@@ -432,7 +464,7 @@ public class KomaController : MonoBehaviour
                 break;
             case "Keima":
                 this.spriteRenderer.sprite = this.changeSprites[6];
-                rightdownFlag = true;
+                leftupFlag = true;
                 rightupFlag = true;
                 break;
             case "Kyousha":
@@ -478,4 +510,19 @@ public class KomaController : MonoBehaviour
         Count[collision.gameObject.tag]++;
         DestroyTag(collision.gameObject.tag);
     }
+    void OnCollisionStay2D(Collision2D collision)//衝突している間
+    {
+        playCredit = 1;
+    }
+    void OnCollisionEnter2D(Collision2D collision)//衝突した瞬間
+    {
+        collisionFlag = true;
+    }
+    void OnCollisionExit2D(Collision2D collision)//離れた瞬間
+    {
+        collisionFlag = false;
+        
+    }
+    
+    
 }
